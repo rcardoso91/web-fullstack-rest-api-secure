@@ -4,6 +4,12 @@ const knexConfig = require('../../knexfile')[process.env.NODE_ENV || 'developmen
 const knex = require('knex')(knexConfig);
 const bcrypt = require('bcryptjs');
 
+apiSeg.get('/', (req, res) => {
+  res.send(`API SEG<br>
+        <a href="">OK</a>`);
+});
+
+
 apiSeg.post('/register', (req, res) => {
   let { login, senha, nome, numero } = req.body;
   let salt = bcrypt.genSaltSync(10);
