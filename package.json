@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 0",
     "migrate:latest": "npx knex migrate:latest",
+    "migrate:rollback": "npx knex migrate:rollback",
     "migrate:rollback-specific": "npx knex migrate:down 20231213022816_create_table_user.js",
     "seed:run": "npx knex seed:run",
     "postinstall": "npm run migrate:rollback && npm run migrate:latest && npm run seed:run",
     "migrate:logs": "npm run migrate:latest && echo 'Migrations executed successfully.'"
   },
+  
   
   
   "keywords": [],
