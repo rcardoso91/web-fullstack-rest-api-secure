@@ -1,5 +1,23 @@
-# Módulos Node.js
+# Ignore node_modules directory
 node_modules/
 
-# Arquivo de ambiente
+# Ignore arquivos de log
+logs
+*.log
+
+# Ignore arquivos temporários
+*.tmp
+
+# Ignore arquivos de build
+dist/
+build/
+
+# Ignore .env file (contém informações sensíveis)
 .env
+
+# Ignore arquivos de configuração do usuário
+.DS_Store
+Thumbs.db
+
+# Ignore diretórios específicos
+/public/upload/
