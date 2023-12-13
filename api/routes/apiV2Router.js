@@ -6,10 +6,10 @@ const knex = require('knex')(knexConfig);
 
 apiV2Router.get('/', (req, res) => {
   res.send(`API V2<br>
-        <a href="/api/usuarios/users">API de Users</a>`);
+        <a href="/api/usuarios/usuario">API de usuario</a>`);
 });
 
-apiV2Router.get('/users', async (req, res) => {
+apiV2Router.get('/usuarios', async (req, res) => {
   try {
     const result = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario');
     res.status(200).json(result);
@@ -18,7 +18,7 @@ apiV2Router.get('/users', async (req, res) => {
   }
 });
 
-apiV2Router.get('/users/:id', async (req, res) => {
+apiV2Router.get('/usuarios/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const user = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
@@ -32,11 +32,11 @@ apiV2Router.get('/users/:id', async (req, res) => {
   }
 });
 
-apiV2Router.post('/users', async (req, res) => {
+apiV2Router.post('/usuarios', async (req, res) => {
   const newUser = req.body;
 
   try {
-    const [id] = await knex('users').insert(newUser);
+    const [id] = await knex('usuario').insert(newUser);
     const userInserted = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
     res.status(201).json({ mensagem: 'Usuário adicionado com sucesso.', user: userInserted });
   } catch (error) {
@@ -44,12 +44,12 @@ apiV2Router.post('/users', async (req, res) => {
   }
 });
 
-apiV2Router.put('/users/:id', async (req, res) => {
+apiV2Router.put('/usuarios/:id', async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
   try {
-    const updatedQuantity = await knex('users').where({ id: id }).update(updatedData);
+    const updatedQuantity = await knex('usuario').where({ id: id }).update(updatedData);
     if (updatedQuantity > 0) {
       const userUpdated = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
       res.status(200).json({ mensagem: 'Usuário atualizado com sucesso.', user: userUpdated });
@@ -61,12 +61,12 @@ apiV2Router.put('/users/:id', async (req, res) => {
   }
 });
 
-apiV2Router.delete('/users/:id', async (req, res) => {
+apiV2Router.delete('/usuarios/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
     const userRemoved = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
-    const removedQuantity = await knex('users').where({ id: id }).del();
+    const removedQuantity = await knex('usuario').where({ id: id }).del();
     if (removedQuantity > 0) {
       res.status(200).json({ mensagem: 'Usuário removido com sucesso.', user: userRemoved });
     } else {
