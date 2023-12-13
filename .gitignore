@@ -1,0 +1,5 @@
+# Módulos Node.js
+node_modules/
+
+# Arquivo de ambiente
+.env
