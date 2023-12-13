@@ -8,9 +8,10 @@
     "migrate-latest": "npx knex migrate:latest",
     "seed-run": "npx knex seed:run",
     "start": "node server.js",
+    "postinstall": "npm run migrate-latest && npm run seed-run",
     "migrate-logs": "npm run migrate-latest && echo 'Migrations executed successfully.'"
-
   },
+  
   "keywords": [],
   "author": "",
   "license": "ISC",
