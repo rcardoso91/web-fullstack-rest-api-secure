@@ -1,7 +1,10 @@
 const express = require('express');
 const apiV1Router = express.Router();
 const knexConfig = require('../../knexfile')[process.env.NODE_ENV || 'development'];
+console.log('Configuração do Knex:', knexConfig);
+
 const knex = require('knex')(knexConfig);
+console.log('Instância do Knex criada.');
 
 const endpoint = '/produtos';
 

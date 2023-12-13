@@ -6,7 +6,7 @@ const knex = require('knex')(knexConfig);
 
 apiV2Router.get('/', (req, res) => {
   res.send(`API V2<br>
-        <a href="/api/v2/users">API de Users</a>`);
+        <a href="/api/usuarios/users">API de Users</a>`);
 });
 
 apiV2Router.get('/users', async (req, res) => {

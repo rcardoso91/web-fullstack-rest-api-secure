@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate-latest": "npx knex migrate:latest",
     "seed-run": "npx knex seed:run",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate-logs": "npm run migrate-latest && echo 'Migrations executed successfully.'"
+
   },
   "keywords": [],
   "author": "",
