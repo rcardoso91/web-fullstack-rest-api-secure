@@ -11,7 +11,7 @@ apiUsuariosRouter.get(`${endpoint}/`, (req, res) => {
 
 const selectUserFields = ['id', 'login', 'senha', 'nome', 'numero'];
 
-apiUsuariosRouter.get(endpoint, async (req, res) => {
+apiUsuariosRouter.get(`${endpoint}/:listar`, async (req, res) => {
   try {
     const result = await knex.select(...selectUserFields).from('users');
     res.status(200).json(result);

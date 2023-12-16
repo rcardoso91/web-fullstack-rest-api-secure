@@ -17,7 +17,7 @@ apiProdutosRouter.use(async (req, res, next) => {
   }
 });
 
-apiProdutosRouter.get(endpoint, async (req, res) => {
+apiProdutosRouter.get(`${endpoint}/:listar`, async (req, res) => {
   const produtos = await knex.select('*').from('produto');
   res.status(200).json(produtos);
 });
