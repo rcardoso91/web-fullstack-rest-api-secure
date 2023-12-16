@@ -9,7 +9,7 @@ apiUsuariosRouter.get(`${endpoint}/`, (req, res) => {
   res.send(`Bem-vindo à API de usuários!`);
 });
 
-const selectUserFields = ['id', 'login', 'senha', 'nome', 'numero'];
+const selectUserFields = ['id', 'nome', 'email', 'login', 'senha', 'roles'];
 
 apiUsuariosRouter.get(`${endpoint}/listar`, async (req, res) => {
   try {
