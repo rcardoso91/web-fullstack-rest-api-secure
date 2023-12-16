@@ -1,27 +1,29 @@
 const express = require('express');
-const apiV2Router = express.Router();
+const apiUsuariosRouter = express.Router();
 const knexConfig = require('../../knexfile')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(knexConfig);
 
+const endpoint = '/usuarios';
 
-apiV2Router.get('/', (req, res) => {
-  res.send(`API V2<br>
-        <a href="/api/usuarios/usuario">API de usuario</a>`);
+apiUsuariosRouter.get(`${endpoint}/`, (req, res) => {
+  res.send(`Bem-vindo à API de usuários!`);
 });
 
-apiV2Router.get('/usuarios', async (req, res) => {
+const selectUserFields = ['id', 'login', 'senha', 'nome', 'numero'];
+
+apiUsuariosRouter.get(endpoint, async (req, res) => {
   try {
-    const result = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario');
+    const result = await knex.select(...selectUserFields).from('users');
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ erro: 'Erro ao recuperar os usuários do banco de dados.' });
   }
 });
 
-apiV2Router.get('/usuarios/:id', async (req, res) => {
+apiUsuariosRouter.get(`${endpoint}/:id`, async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
+    const user = await knex.select(...selectUserFields).from('users').where({ id }).first();
     if (user) {
       res.status(200).json(user);
     } else {
@@ -32,26 +34,26 @@ apiV2Router.get('/usuarios/:id', async (req, res) => {
   }
 });
 
-apiV2Router.post('/usuarios', async (req, res) => {
+apiUsuariosRouter.post(endpoint, async (req, res) => {
   const newUser = req.body;
 
   try {
-    const [id] = await knex('usuario').insert(newUser);
-    const userInserted = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
+    const [id] = await knex('users').insert(newUser);
+    const userInserted = await knex.select(...selectUserFields).from('users').where({ id }).first();
     res.status(201).json({ mensagem: 'Usuário adicionado com sucesso.', user: userInserted });
   } catch (error) {
     res.status(400).json({ erro: 'Os dados do usuário são obrigatórios.' });
   }
 });
 
-apiV2Router.put('/usuarios/:id', async (req, res) => {
+apiUsuariosRouter.put(`${endpoint}/:id`, async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
   try {
-    const updatedQuantity = await knex('usuario').where({ id: id }).update(updatedData);
+    const updatedQuantity = await knex('users').where({ id }).update(updatedData);
     if (updatedQuantity > 0) {
-      const userUpdated = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
+      const userUpdated = await knex.select(...selectUserFields).from('users').where({ id }).first();
       res.status(200).json({ mensagem: 'Usuário atualizado com sucesso.', user: userUpdated });
     } else {
       res.status(404).json({ erro: 'Usuário não encontrado.' });
@@ -61,12 +63,12 @@ apiV2Router.put('/usuarios/:id', async (req, res) => {
   }
 });
 
-apiV2Router.delete('/usuarios/:id', async (req, res) => {
+apiUsuariosRouter.delete(`${endpoint}/:id`, async (req, res) => {
   const { id } = req.params;
 
   try {
-    const userRemoved = await knex.select('id', 'login', 'senha', 'nome', 'numero').from('usuario').where({ id: id }).first();
-    const removedQuantity = await knex('usuario').where({ id: id }).del();
+    const userRemoved = await knex.select(...selectUserFields).from('users').where({ id }).first();
+    const removedQuantity = await knex('users').where({ id }).del();
     if (removedQuantity > 0) {
       res.status(200).json({ mensagem: 'Usuário removido com sucesso.', user: userRemoved });
     } else {
@@ -77,6 +79,4 @@ apiV2Router.delete('/usuarios/:id', async (req, res) => {
   }
 });
 
-
-module.exports = apiV2Router;
-
+module.exports = apiUsuariosRouter;
