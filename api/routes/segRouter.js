@@ -13,7 +13,7 @@ apiSeg.post('/register', (req, res) => {
   let { login, senha, nome, numero } = req.body;
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(senha, salt);
-  knex('usuarios').insert({ login, senha: hash, nome, numero })
+  knex('usuario').insert({ login, senha: hash, nome, numero })
     .then((dados) => {
       res.status(201).json({ dados });
     })
@@ -25,7 +25,7 @@ apiSeg.post('/register', (req, res) => {
 
 apiSeg.post('/login', (req, res) => {
   let { login, senha } = req.body;
-  knex('usuarios').where('login', login)
+  knex('usuario').where('login', login)
     .then((dados) => {
       if (dados.length == 0) {
         res.status(401).json({ erro: 'Login não encontrado' });
