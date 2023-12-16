@@ -38,7 +38,7 @@ apiUsuariosRouter.post(endpoint, async (req, res) => {
   const newUser = req.body;
 
   try {
-    const [id] = await knex('users').insert(newUser);
+    const [id] = await knex('usuario').insert(newUser);
     const userInserted = await knex.select(...selectUserFields).from('usuario').where({ id }).first();
     res.status(201).json({ mensagem: 'Usuário adicionado com sucesso.', user: userInserted });
   } catch (error) {
@@ -51,7 +51,7 @@ apiUsuariosRouter.put(`${endpoint}/:id`, async (req, res) => {
   const updatedData = req.body;
 
   try {
-    const updatedQuantity = await knex('users').where({ id }).update(updatedData);
+    const updatedQuantity = await knex('usuario').where({ id }).update(updatedData);
     if (updatedQuantity > 0) {
       const userUpdated = await knex.select(...selectUserFields).from('usuario').where({ id }).first();
       res.status(200).json({ mensagem: 'Usuário atualizado com sucesso.', user: userUpdated });
