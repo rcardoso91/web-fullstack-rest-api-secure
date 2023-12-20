@@ -32,13 +32,20 @@ app.use((err, req, res, next) => {
   res.status(500).send('Erro interno do servidor');
 });
 
+app.use((req, res, next) => {
+  console.log(`Data: ${new Date()} - Method: ${req.method} - URL: ${req.url}`);
+  next();
+});
 
-let port = process.env.PORT || 3000;
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*'); 
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
-const server = app.listen(port, () => {
-    const address = server.address();
-    const ip = address.address === '::' ? 'localhost' : address.address;
-    const port = address.port;
-  
-    console.log(`Server is running at http://${ip}:${port}`);
-  });
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
