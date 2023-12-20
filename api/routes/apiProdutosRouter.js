@@ -2,10 +2,12 @@ const express = require('express');
 const apiProdutosRouter = express.Router();
 const knexConfig = require('../../knexfile')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(knexConfig);
+const { checkToken, isAdmin } = require('../seguranca/seguranca'); 
+
 
 const endpoint = '/produtos';
 
-apiProdutosRouter.get(`${endpoint}/`, (req, res) => {
+apiProdutosRouter.get(`${endpoint}/`, checkToken, (req, res) => {
   res.send(`Bem-vindo à API de produtos!`);
 });
 
@@ -17,12 +19,12 @@ apiProdutosRouter.use(async (req, res, next) => {
   }
 });
 
-apiProdutosRouter.get(`${endpoint}/listar`, async (req, res) => {
+apiProdutosRouter.get(`${endpoint}/listar`, checkToken, async (req, res) => {
   const produtos = await knex.select('*').from('produto');
   res.status(200).json(produtos);
 });
 
-apiProdutosRouter.get(`${endpoint}/:id`, async (req, res) => {
+apiProdutosRouter.get(`${endpoint}/:id`, checkToken, async (req, res) => {
   const { id } = req.params;
   const produto = await knex.select('*').from('produto').where('id', id);
 
@@ -33,7 +35,7 @@ apiProdutosRouter.get(`${endpoint}/:id`, async (req, res) => {
   }
 });
 
-apiProdutosRouter.post(endpoint, async (req, res) => {
+apiProdutosRouter.post(endpoint, checkToken, isAdmin, async (req, res) => {
   const { descricao, valor, marca } = req.body;
 
   if (!descricao || !valor) {
@@ -44,7 +46,7 @@ apiProdutosRouter.post(endpoint, async (req, res) => {
   res.status(201).json(produto);
 });
 
-apiProdutosRouter.put(`${endpoint}/:id`, async (req, res) => {
+apiProdutosRouter.put(`${endpoint}/:id`, checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;
   const { descricao, valor, marca } = req.body;
 
@@ -62,7 +64,7 @@ apiProdutosRouter.put(`${endpoint}/:id`, async (req, res) => {
 });
 
 // Excluir um produto por ID
-apiProdutosRouter.delete(`${endpoint}/:id`, async (req, res) => {
+apiProdutosRouter.delete(`${endpoint}/:id`, checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;
   const rowsAffected = await knex('produto').where('id', id).del();
 
@@ -72,5 +74,7 @@ apiProdutosRouter.delete(`${endpoint}/:id`, async (req, res) => {
     res.status(404).json({ message: 'Produto não encontrado' });
   }
 });
+
+
 
 module.exports = apiProdutosRouter;
