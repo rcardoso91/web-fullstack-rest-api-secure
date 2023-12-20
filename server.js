@@ -16,7 +16,7 @@ const apiUsuariosRouter = require('./api/routes/apiUsuariosRouter');
 app.use('/api', apiUsuariosRouter);//usuarios
 
 const segRouter = require('./api/routes/segRouter');
-app.use('/seg', segRouter);//autenticacao
+app.use('/auth', segRouter);//autenticacao
 
 
 app.get('/not-found', (req, res) => {
@@ -26,6 +26,12 @@ app.get('/not-found', (req, res) => {
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'not-found.html'));
 });
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Erro interno do servidor');
+});
+
 
 let port = process.env.PORT || 3000;
 
