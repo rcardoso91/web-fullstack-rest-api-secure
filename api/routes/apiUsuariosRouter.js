@@ -2,16 +2,18 @@ const express = require('express');
 const apiUsuariosRouter = express.Router();
 const knexConfig = require('../../knexfile')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(knexConfig);
+const { checkToken, isAdmin } = require('../seguranca/seguranca'); 
+
 
 const endpoint = '/usuarios';
 
-apiUsuariosRouter.get(`${endpoint}/`, (req, res) => {
+apiUsuariosRouter.get(`${endpoint}/`,checkToken, (req, res) => {
   res.send(`Bem-vindo à API de usuários!`);
 });
 
 const selectUserFields = ['id', 'nome', 'email', 'login', 'senha', 'roles'];
 
-apiUsuariosRouter.get(`${endpoint}/listar`, async (req, res) => {
+apiUsuariosRouter.get(`${endpoint}/listar`,checkToken, async (req, res) => {
   try {
     const result = await knex.select(...selectUserFields).from('usuario');
     res.status(200).json(result);
@@ -20,7 +22,7 @@ apiUsuariosRouter.get(`${endpoint}/listar`, async (req, res) => {
   }
 });
 
-apiUsuariosRouter.get(`${endpoint}/:id`, async (req, res) => {
+apiUsuariosRouter.get(`${endpoint}/:id`, checkToken,async (req, res) => {
   const { id } = req.params;
   try {
     const user = await knex.select(...selectUserFields).from('usuario').where({ id }).first();
@@ -34,7 +36,7 @@ apiUsuariosRouter.get(`${endpoint}/:id`, async (req, res) => {
   }
 });
 
-apiUsuariosRouter.post(endpoint, async (req, res) => {
+apiUsuariosRouter.post(endpoint,checkToken, isAdmin, async (req, res) => {
   const newUser = req.body;
 
   try {
@@ -46,7 +48,7 @@ apiUsuariosRouter.post(endpoint, async (req, res) => {
   }
 });
 
-apiUsuariosRouter.put(`${endpoint}/:id`, async (req, res) => {
+apiUsuariosRouter.put(`${endpoint}/:id`,checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
@@ -63,7 +65,7 @@ apiUsuariosRouter.put(`${endpoint}/:id`, async (req, res) => {
   }
 });
 
-apiUsuariosRouter.delete(`${endpoint}/:id`, async (req, res) => {
+apiUsuariosRouter.delete(`${endpoint}/:id`,checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;
 
   try {
