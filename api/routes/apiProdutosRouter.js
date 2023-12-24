@@ -35,6 +35,42 @@ apiProdutosRouter.get(`${endpoint}/:id`, checkToken, async (req, res) => {
   }
 });
 
+
+apiProdutosRouter.get(`${endpoint}/:descricao`, checkToken, async (req, res) => {
+  const { descricao } = req.params;
+  const produto = await knex.select('*').from('produto').where('descricao', descricao);
+
+  if (produto.length > 0) {
+    res.status(200).json(produto[0]);
+  } else {
+    res.status(404).json({ message: 'Produto não encontrado' });
+  }
+});
+
+
+apiProdutosRouter.get(`${endpoint}/:valor`, checkToken, async (req, res) => {
+  const { valor } = req.params;
+  const produto = await knex.select('*').from('produto').where('valor', valor);
+
+  if (produto.length > 0) {
+    res.status(200).json(produto[0]);
+  } else {
+    res.status(404).json({ message: 'Produto não encontrado' });
+  }
+});
+
+
+apiProdutosRouter.get(`${endpoint}/:marca`, checkToken, async (req, res) => {
+  const { descmarcaricao } = req.params;
+  const produto = await knex.select('*').from('marca').where('marca', marca);
+
+  if (produto.length > 0) {
+    res.status(200).json(produto[0]);
+  } else {
+    res.status(404).json({ message: 'Produto não encontrado' });
+  }
+});
+
 apiProdutosRouter.post(endpoint, checkToken, isAdmin, async (req, res) => {
   const { descricao, valor, marca } = req.body;
 
