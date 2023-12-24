@@ -3,7 +3,8 @@ const apiUsuariosRouter = express.Router();
 const knexConfig = require('../../knexfile')[process.env.NODE_ENV || 'development'];
 const knex = require('knex')(knexConfig);
 const { checkToken, isAdmin } = require('../seguranca/seguranca'); 
-
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const endpoint = '/usuarios';
 
@@ -48,7 +49,7 @@ apiUsuariosRouter.post(endpoint,checkToken, isAdmin, async (req, res) => {
   }
 });
 
-apiUsuariosRouter.put(`${endpoint}/:id`, checkToken, isAdmin, async (req, res) => {
+apiUsuariosRouter.put(`${endpoint}/:id`, checkToken, async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
