@@ -81,4 +81,5 @@ apiUsuariosRouter.delete(`${endpoint}/:id`,checkToken, isAdmin, async (req, res)
   }
 });
 
+
 module.exports = apiUsuariosRouter;

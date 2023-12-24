@@ -60,4 +60,39 @@ apiSeg.post(endpoint + '/login', async (req, res) => {
   }
 });
 
+apiSeg.get(endpoint + '/renovar', verificarToken, async (req, res) => {
+  try {
+    const usuario = req.usuario;
+
+    // Simulando a renovação do token
+    const novoToken = jwt.sign({ id: usuario.id },
+      process.env.SECRET_KEY, {
+        expiresIn: 3600
+      });
+
+    res.json({ novoToken });
+  } catch (error) {
+    console.error('Erro ao renovar o token:', error);
+    res.status(500).json({ error: 'Erro ao renovar o token.' });
+  }
+});
+
+async function verificarToken(req, res, next) {
+  const token = req.headers['authorization'];
+
+  if (!token) {
+    return res.status(401).json({ mensagem: 'Token não fornecido.' });
+  }
+
+  try {
+    const decoded = await validarToken(token);
+    req.usuario = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ mensagem: 'Token inválido.' });
+  }
+}
+
+
+
 module.exports = apiSeg;
