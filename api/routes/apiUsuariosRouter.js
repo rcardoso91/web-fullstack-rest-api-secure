@@ -53,12 +53,14 @@ apiUsuariosRouter.put(`${endpoint}/:id`, checkToken, async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
-  if ('senha' in updatedData && updatedData.senha.trim() === '') {
-      delete updatedData.senha;
-  }else{
+  if ('senha' in updatedData) {
+    if (updatedData.senha.trim() === '') {
+        delete updatedData.senha;
+    } else {
+        updatedData.senha = bcrypt.hashSync(updatedData.senha, 8);
+    }
+}
 
-    updatedData.senha = bcrypt.hashSync(updatedData.senha, 8);
-  }
 
   try {
       const updatedQuantity = await knex('usuario').where({ id }).update(updatedData);
@@ -79,7 +81,7 @@ apiUsuariosRouter.delete(`${endpoint}/:id`,checkToken, isAdmin, async (req, res)
 
   try {
     const userRemoved = await knex.select(...selectUserFields).from('usuario').where({ id }).first();
-    const removedQuantity = await knex('users').where({ id }).del();
+    const removedQuantity = await knex('usuario').where({ id }).del();
     if (removedQuantity > 0) {
       res.status(200).json({ mensagem: 'Usuário removido com sucesso.', user: userRemoved });
     } else {
