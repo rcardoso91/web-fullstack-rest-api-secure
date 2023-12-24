@@ -17,7 +17,8 @@ apiSeg.post(endpoint + '/register', async (req, res) => {
       nome: req.body.nome,
       login: req.body.login,
       senha: bcrypt.hashSync(req.body.senha, 8),
-      email: req.body.email
+      email: req.body.email,
+      roles: req.body.roles
     }, ['id']);
     const usuario = result[0];
     res.status(200).json({ id: usuario.id });
