@@ -60,7 +60,7 @@ apiSeg.post(endpoint + '/login', async (req, res) => {
   }
 });
 
-apiSeg.get(endpoint + '/renovar', verificarToken, async (req, res) => {
+apiSeg.post(`${endpoint}/renovar`, verificarToken, async (req, res) => {
   try {
     const usuario = req.usuario;
 
