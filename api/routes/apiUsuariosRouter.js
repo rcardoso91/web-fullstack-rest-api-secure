@@ -48,22 +48,27 @@ apiUsuariosRouter.post(endpoint,checkToken, isAdmin, async (req, res) => {
   }
 });
 
-apiUsuariosRouter.put(`${endpoint}/:id`,checkToken, isAdmin, async (req, res) => {
+apiUsuariosRouter.put(`${endpoint}/:id`, checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;
   const updatedData = req.body;
 
+  if ('senha' in updatedData && updatedData.senha.trim() === '') {
+      delete updatedData.senha;
+  }
+
   try {
-    const updatedQuantity = await knex('usuario').where({ id }).update(updatedData);
-    if (updatedQuantity > 0) {
-      const userUpdated = await knex.select(...selectUserFields).from('usuario').where({ id }).first();
-      res.status(200).json({ mensagem: 'Usuário atualizado com sucesso.', user: userUpdated });
-    } else {
-      res.status(404).json({ erro: 'Usuário não encontrado.' });
-    }
+      const updatedQuantity = await knex('usuario').where({ id }).update(updatedData);
+      if (updatedQuantity > 0) {
+          const userUpdated = await knex.select(...selectUserFields).from('usuario').where({ id }).first();
+          res.status(200).json({ mensagem: 'Usuário atualizado com sucesso.', user: userUpdated });
+      } else {
+          res.status(404).json({ erro: 'Usuário não encontrado.' });
+      }
   } catch (error) {
-    res.status(500).json({ erro: 'Erro ao atualizar o usuário no banco de dados.' });
+      res.status(500).json({ erro: 'Erro ao atualizar o usuário no banco de dados.' });
   }
 });
+
 
 apiUsuariosRouter.delete(`${endpoint}/:id`,checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;

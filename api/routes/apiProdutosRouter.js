@@ -70,6 +70,8 @@ apiProdutosRouter.post(endpoint, checkToken, isAdmin, async (req, res) => {
   res.status(201).json(produto);
 });
 
+
+
 apiProdutosRouter.put(`${endpoint}/:id`, checkToken, isAdmin, async (req, res) => {
   const { id } = req.params;
   const { descricao, valor, marca } = req.body;
