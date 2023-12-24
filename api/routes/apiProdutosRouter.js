@@ -42,8 +42,9 @@ apiProdutosRouter.get(`${endpoint}/listar`, checkToken, async (req, res) => {
     }
 
     if (id) {
-      query = query.where('id', 'like', `%${id}%`);
-    }
+      query = query.where('id', '=', id);
+  }
+  
 
     query = query.orderBy(req.query.orderBy || 'id');
 
