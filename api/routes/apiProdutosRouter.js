@@ -21,13 +21,10 @@ apiProdutosRouter.use(async (req, res, next) => {
 
 apiProdutosRouter.get(`${endpoint}/listar`, checkToken, async (req, res) => {
   try {
-    // Obter parâmetros de consulta da requisição
-    const { marca, descricao, precoMin, precoMax } = req.query;
+    const { marca, descricao, precoMin, precoMax,id } = req.query;
 
-    // Construir a consulta base
     let query = knex.select('*').from('produto');
 
-    // Aplicar filtros se existirem
     if (marca) {
       query = query.where('marca', 'like', `%${marca}%`);
     }
@@ -44,10 +41,12 @@ apiProdutosRouter.get(`${endpoint}/listar`, checkToken, async (req, res) => {
       query = query.where('valor', '<=', precoMax);
     }
 
-    // Ordenar por ID por padrão, se nenhum outro critério de ordenação for fornecido
+    if (id) {
+      query = query.where('id', 'like', `%${id}%`);
+    }
+
     query = query.orderBy(req.query.orderBy || 'id');
 
-    // Executar a consulta
     const produtos = await query;
 
     res.status(200).json(produtos);
