@@ -54,6 +54,9 @@ apiUsuariosRouter.put(`${endpoint}/:id`, checkToken, isAdmin, async (req, res) =
 
   if ('senha' in updatedData && updatedData.senha.trim() === '') {
       delete updatedData.senha;
+  }else{
+
+    updatedData.senha = bcrypt.hashSync(updatedData.senha, 8);
   }
 
   try {
