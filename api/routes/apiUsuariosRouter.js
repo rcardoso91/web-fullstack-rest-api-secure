@@ -11,7 +11,7 @@ apiUsuariosRouter.get(`${endpoint}/`,checkToken, (req, res) => {
   res.send(`Bem-vindo à API de usuários!`);
 });
 
-const selectUserFields = ['id', 'nome', 'email', 'login', 'senha', 'roles'];
+const selectUserFields = ['id', 'nome', 'email', 'login', 'roles'];
 
 apiUsuariosRouter.get(`${endpoint}/listar`,checkToken, async (req, res) => {
   try {
