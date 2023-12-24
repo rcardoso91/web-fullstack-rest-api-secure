@@ -78,20 +78,21 @@ apiSeg.post(`${endpoint}/renovar`, verificarToken, async (req, res) => {
 });
 
 async function verificarToken(req, res, next) {
-  const token = req.headers['authorization'];
+  const token = req.body.token; 
 
   if (!token) {
-    return res.status(401).json({ mensagem: 'Token não fornecido.' });
+      return res.status(401).json({ mensagem: 'Token não fornecido.' });
   }
 
   try {
-    const decoded = await validarToken(token);
-    req.usuario = decoded;
-    next();
+      const decoded = await validarToken(token);
+      req.usuario = decoded;
+      next();
   } catch (error) {
-    return res.status(401).json({ mensagem: 'Token inválido.' });
+      return res.status(401).json({ mensagem: 'Token inválido.' });
   }
 }
+
 
 
 
